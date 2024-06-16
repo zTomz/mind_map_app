@@ -28,13 +28,18 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  auto_route: ^8.2.0
   flutter:
     sdk: flutter
 
+  flutter_hooks: ^0.20.5
   flutter_mind_map:
     path: packages/flutter_mind_map
 
 dev_dependencies:
+  auto_route_generator: ^8.0.0
+  build_runner: ^2.4.11
+  
   flutter_test:
     sdk: flutter
 
