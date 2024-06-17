@@ -1,9 +1,11 @@
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mind_map_app/core/config/design/design.dart';
+import 'package:mind_map_app/core/config/router/app_router.dart';
 import 'package:mind_map_app/core/cubits/app_info.dart';
 import 'package:mind_map_app/core/extensions/theme.dart';
+import 'package:mind_map_app/features/mind_map/data/models/mind_map.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 @RoutePage()
@@ -13,13 +15,19 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: FloatingActionButton.large(
-      //   onPressed: () {},
-      //   child: Icon(
-      //     Icons.add,
-      //     color: context.colorScheme.primary,
-      //   ),
-      // ),
+      floatingActionButton: FloatingActionButton.large(
+        onPressed: () {
+          context.router.push(
+            MindMapRoute(
+              mindMap: MindMap.fromName(name: 'New Mind Map'),
+            ),
+          );
+        },
+        child: Icon(
+          Icons.add,
+          color: context.colorScheme.primary,
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(Spacing.medium),
