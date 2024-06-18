@@ -82,20 +82,29 @@ class HomePage extends StatelessWidget {
                     color: context.colorScheme.surfaceContainer,
                     borderRadius: BorderRadius.circular(Radii.medium),
                   ),
-                  child: ListView.builder(
-                    itemCount: 15,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text("Item $index"),
-                        subtitle: const Text("16.06.2024 12:47"),
-                        trailing: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.delete_outlined),
-                        ),
-                        onTap: () {},
-                        tileColor: Colors.orange,
-                      );
-                    },
+                  child: Material(
+                    color: context.colorScheme.surfaceContainer,
+                    child: ListView.separated(
+                      itemCount: 15,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text("Item $index"),
+                          subtitle: const Text("16.06.2024 12:47"),
+                          trailing: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.delete_outlined),
+                          ),
+                          onTap: () {},
+                          tileColor: context.colorScheme.surfaceContainerLow,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(Radii.medium),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (_, __) => const SizedBox(
+                        height: Spacing.small,
+                      ),
+                    ),
                   ),
                 ),
               ),
