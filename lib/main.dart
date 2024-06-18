@@ -1,39 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mind_map_app/core/config/bloc_observer.dart';
-import 'package:mind_map_app/core/config/router/app_router.dart';
-import 'package:mind_map_app/core/cubits/app_info.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:open_mind/app/app.bottomsheets.dart';
+import 'package:open_mind/app/app.dialogs.dart';
+import 'package:open_mind/app/app.locator.dart';
+import 'package:open_mind/app/app.router.dart';
+import 'package:open_mind/services/app_info_service.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await setupLocator();
+  setupDialogUi();
+  setupBottomSheetUi();
 
-  Bloc.observer = const MindMapObserver();
-  final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  await locator<AppInfoService>().init();
 
-  runApp(
-    BlocProvider(
-      create: (context) => AppInfoCubit(packageInfo: packageInfo),
-      child: const MyApp(),
-    ),
-  );
+  runApp(const MainApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
-  static AppRouter appRouter = AppRouter();
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Mind Map App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      routerConfig: appRouter.config(),
+    return MaterialApp(
+      initialRoute: Routes.homeView,
+      onGenerateRoute: StackedRouter().onGenerateRoute,
+      navigatorKey: StackedService.navigatorKey,
+      navigatorObservers: [
+        StackedService.routeObserver,
+      ],
     );
   }
 }

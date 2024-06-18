@@ -1,6 +1,6 @@
 {
-    "name": "mind_map_app",
-    "short_name": "mind_map_app",
+    "name": "open_mind",
+    "short_name": "open_mind",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
