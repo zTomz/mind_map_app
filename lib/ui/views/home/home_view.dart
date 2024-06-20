@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:open_mind/app/app.dialogs.dart';
 import 'package:open_mind/app/app.locator.dart';
 import 'package:open_mind/app/app.router.dart';
 import 'package:open_mind/services/app_info_service.dart';
 import 'package:open_mind/ui/common/theme_extension.dart';
 import 'package:open_mind/ui/common/ui_helpers.dart';
+import 'package:open_mind/ui/dialogs/create_new_mind_map/create_new_mind_map_dialog.dart';
 import 'package:open_mind/ui/views/mind_map/models/mind_map.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -21,10 +23,17 @@ class HomeView extends StackedView<HomeViewModel> {
   ) {
     return Scaffold(
       floatingActionButton: FloatingActionButton.large(
-        onPressed: () {
-          locator<NavigationService>().navigateToMindMapView(
-            mindMap: MindMap.fromName(name: 'Test'),
+        onPressed: () async {
+          final result = await locator<DialogService>()
+              .showCustomDialog<String, CreateNewMindMapDialog>(
+            variant: DialogType.createNewMindMap,
           );
+
+          if (result != null && result.confirmed && result.data != null) {
+            locator<NavigationService>().navigateToMindMapView(
+              mindMap: MindMap.fromName(name: result.data!),
+            );
+          }
         },
         child: Icon(
           Icons.add,

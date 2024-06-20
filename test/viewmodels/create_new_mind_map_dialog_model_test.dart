@@ -4,7 +4,7 @@ import 'package:open_mind/app/app.locator.dart';
 import '../helpers/test_helpers.dart';
 
 void main() {
-  group('EmptyDialogModel Tests -', () {
+  group('CreateNewMindMapDialogModel Tests -', () {
     setUp(() => registerServices());
     tearDown(() => locator.reset());
   });

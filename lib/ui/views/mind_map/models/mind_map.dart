@@ -1,4 +1,3 @@
-
 import 'package:open_mind/ui/views/mind_map/models/node.dart';
 
 class MindMap {
@@ -12,9 +11,10 @@ class MindMap {
     required this.createdAt,
   });
 
-  MindMap.fromName({required String name}) : this(
-    root: Node.root(name),
-    name: name,
-    createdAt: DateTime.now(),
-  );
+  MindMap.fromName({required String name})
+      : this(
+          root: Node.root(name),
+          name: name,
+          createdAt: DateTime.now(),
+        );
 }
