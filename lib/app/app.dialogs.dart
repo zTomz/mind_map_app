@@ -7,18 +7,18 @@
 import 'package:stacked_services/stacked_services.dart';
 
 import 'app.locator.dart';
-import '../ui/dialogs/create_new_mind_map/create_new_mind_map_dialog.dart';
+import '../ui/dialogs/text_field/text_field_dialog.dart';
 
 enum DialogType {
-  createNewMindMap,
+  textField,
 }
 
 void setupDialogUi() {
   final dialogService = locator<DialogService>();
 
   final Map<DialogType, DialogBuilder> builders = {
-    DialogType.createNewMindMap: (context, request, completer) =>
-        CreateNewMindMapDialog(request: request, completer: completer),
+    DialogType.textField: (context, request, completer) =>
+        TextFieldDialog(request: request, completer: completer),
   };
 
   dialogService.registerCustomDialogBuilders(builders);

@@ -19,12 +19,14 @@ class MindMapWidget extends StackedView<MindMapModel> {
     MindMapModel viewModel,
     Widget? child,
   ) {
-
     return Stack(
       children: [
         Center(
-          child: MindMapBubbel(node: viewModel.mindMap.root),
+          child: MindMapBubbel(node: mindMap.root),
         ),
+        ...mindMap.getNodes().skip(1).map(
+              (node) => MindMapBubbel(node: node),
+            ),
       ],
     );
   }
@@ -33,7 +35,5 @@ class MindMapWidget extends StackedView<MindMapModel> {
   MindMapModel viewModelBuilder(
     BuildContext context,
   ) =>
-      MindMapModel(
-        mindMap: mindMap,
-      );
+      MindMapModel();
 }

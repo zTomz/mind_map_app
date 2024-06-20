@@ -7,54 +7,54 @@
 // ignore_for_file: public_member_api_docs, constant_identifier_names, non_constant_identifier_names,unnecessary_this
 
 import 'package:flutter/material.dart';
-import 'package:open_mind/ui/dialogs/create_new_mind_map/form_validator.dart';
+import 'package:open_mind/ui/dialogs/text_field/basic_validator.dart';
 import 'package:stacked/stacked.dart';
 
 const bool _autoTextFieldValidation = true;
 
-const String MindMapNameValueKey = 'mindMapName';
+const String TextValueKey = 'text';
 
 final Map<String, TextEditingController>
-    _CreateNewMindMapDialogTextEditingControllers = {};
+    _TextFieldDialogTextEditingControllers = {};
 
-final Map<String, FocusNode> _CreateNewMindMapDialogFocusNodes = {};
+final Map<String, FocusNode> _TextFieldDialogFocusNodes = {};
 
-final Map<String, String? Function(String?)?>
-    _CreateNewMindMapDialogTextValidations = {
-  MindMapNameValueKey: CreateNewMindMapFormValidator.validateMindMapName,
+final Map<String, String? Function(String?)?> _TextFieldDialogTextValidations =
+    {
+  TextValueKey: BasicValidator.validateText,
 };
 
-mixin $CreateNewMindMapDialog {
-  TextEditingController get mindMapNameController =>
-      _getFormTextEditingController(MindMapNameValueKey);
+mixin $TextFieldDialog {
+  TextEditingController get textController =>
+      _getFormTextEditingController(TextValueKey);
 
-  FocusNode get mindMapNameFocusNode => _getFormFocusNode(MindMapNameValueKey);
+  FocusNode get textFocusNode => _getFormFocusNode(TextValueKey);
 
   TextEditingController _getFormTextEditingController(
     String key, {
     String? initialValue,
   }) {
-    if (_CreateNewMindMapDialogTextEditingControllers.containsKey(key)) {
-      return _CreateNewMindMapDialogTextEditingControllers[key]!;
+    if (_TextFieldDialogTextEditingControllers.containsKey(key)) {
+      return _TextFieldDialogTextEditingControllers[key]!;
     }
 
-    _CreateNewMindMapDialogTextEditingControllers[key] =
+    _TextFieldDialogTextEditingControllers[key] =
         TextEditingController(text: initialValue);
-    return _CreateNewMindMapDialogTextEditingControllers[key]!;
+    return _TextFieldDialogTextEditingControllers[key]!;
   }
 
   FocusNode _getFormFocusNode(String key) {
-    if (_CreateNewMindMapDialogFocusNodes.containsKey(key)) {
-      return _CreateNewMindMapDialogFocusNodes[key]!;
+    if (_TextFieldDialogFocusNodes.containsKey(key)) {
+      return _TextFieldDialogFocusNodes[key]!;
     }
-    _CreateNewMindMapDialogFocusNodes[key] = FocusNode();
-    return _CreateNewMindMapDialogFocusNodes[key]!;
+    _TextFieldDialogFocusNodes[key] = FocusNode();
+    return _TextFieldDialogFocusNodes[key]!;
   }
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
   void syncFormWithViewModel(FormStateHelper model) {
-    mindMapNameController.addListener(() => _updateFormData(model));
+    textController.addListener(() => _updateFormData(model));
 
     _updateFormData(model, forceValidate: _autoTextFieldValidation);
   }
@@ -66,7 +66,7 @@ mixin $CreateNewMindMapDialog {
     'This feature was deprecated after 3.1.0.',
   )
   void listenToFormUpdated(FormViewModel model) {
-    mindMapNameController.addListener(() => _updateFormData(model));
+    textController.addListener(() => _updateFormData(model));
 
     _updateFormData(model, forceValidate: _autoTextFieldValidation);
   }
@@ -76,7 +76,7 @@ mixin $CreateNewMindMapDialog {
     model.setData(
       model.formValueMap
         ..addAll({
-          MindMapNameValueKey: mindMapNameController.text,
+          TextValueKey: textController.text,
         }),
     );
 
@@ -94,16 +94,15 @@ mixin $CreateNewMindMapDialog {
   void disposeForm() {
     // The dispose function for a TextEditingController sets all listeners to null
 
-    for (var controller
-        in _CreateNewMindMapDialogTextEditingControllers.values) {
+    for (var controller in _TextFieldDialogTextEditingControllers.values) {
       controller.dispose();
     }
-    for (var focusNode in _CreateNewMindMapDialogFocusNodes.values) {
+    for (var focusNode in _TextFieldDialogFocusNodes.values) {
       focusNode.dispose();
     }
 
-    _CreateNewMindMapDialogTextEditingControllers.clear();
-    _CreateNewMindMapDialogFocusNodes.clear();
+    _TextFieldDialogTextEditingControllers.clear();
+    _TextFieldDialogFocusNodes.clear();
   }
 }
 
@@ -119,56 +118,53 @@ extension ValueProperties on FormStateHelper {
     return !hasAnyValidationMessage;
   }
 
-  String? get mindMapNameValue =>
-      this.formValueMap[MindMapNameValueKey] as String?;
+  String? get textValue => this.formValueMap[TextValueKey] as String?;
 
-  set mindMapNameValue(String? value) {
+  set textValue(String? value) {
     this.setData(
-      this.formValueMap..addAll({MindMapNameValueKey: value}),
+      this.formValueMap..addAll({TextValueKey: value}),
     );
 
-    if (_CreateNewMindMapDialogTextEditingControllers.containsKey(
-        MindMapNameValueKey)) {
-      _CreateNewMindMapDialogTextEditingControllers[MindMapNameValueKey]?.text =
-          value ?? '';
+    if (_TextFieldDialogTextEditingControllers.containsKey(TextValueKey)) {
+      _TextFieldDialogTextEditingControllers[TextValueKey]?.text = value ?? '';
     }
   }
 
-  bool get hasMindMapName =>
-      this.formValueMap.containsKey(MindMapNameValueKey) &&
-      (mindMapNameValue?.isNotEmpty ?? false);
+  bool get hasText =>
+      this.formValueMap.containsKey(TextValueKey) &&
+      (textValue?.isNotEmpty ?? false);
 
-  bool get hasMindMapNameValidationMessage =>
-      this.fieldsValidationMessages[MindMapNameValueKey]?.isNotEmpty ?? false;
+  bool get hasTextValidationMessage =>
+      this.fieldsValidationMessages[TextValueKey]?.isNotEmpty ?? false;
 
-  String? get mindMapNameValidationMessage =>
-      this.fieldsValidationMessages[MindMapNameValueKey];
+  String? get textValidationMessage =>
+      this.fieldsValidationMessages[TextValueKey];
 }
 
 extension Methods on FormStateHelper {
-  setMindMapNameValidationMessage(String? validationMessage) =>
-      this.fieldsValidationMessages[MindMapNameValueKey] = validationMessage;
+  setTextValidationMessage(String? validationMessage) =>
+      this.fieldsValidationMessages[TextValueKey] = validationMessage;
 
   /// Clears text input fields on the Form
   void clearForm() {
-    mindMapNameValue = '';
+    textValue = '';
   }
 
   /// Validates text input fields on the Form
   void validateForm() {
     this.setValidationMessages({
-      MindMapNameValueKey: getValidationMessage(MindMapNameValueKey),
+      TextValueKey: getValidationMessage(TextValueKey),
     });
   }
 }
 
 /// Returns the validation message for the given key
 String? getValidationMessage(String key) {
-  final validatorForKey = _CreateNewMindMapDialogTextValidations[key];
+  final validatorForKey = _TextFieldDialogTextValidations[key];
   if (validatorForKey == null) return null;
 
   String? validationMessageForKey = validatorForKey(
-    _CreateNewMindMapDialogTextEditingControllers[key]!.text,
+    _TextFieldDialogTextEditingControllers[key]!.text,
   );
 
   return validationMessageForKey;
@@ -177,5 +173,5 @@ String? getValidationMessage(String key) {
 /// Updates the fieldsValidationMessages on the FormViewModel
 void updateValidationData(FormStateHelper model) =>
     model.setValidationMessages({
-      MindMapNameValueKey: getValidationMessage(MindMapNameValueKey),
+      TextValueKey: getValidationMessage(TextValueKey),
     });

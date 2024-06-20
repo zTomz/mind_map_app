@@ -21,6 +21,8 @@ class Node {
           children: [],
         );
 
+  bool get isRoot => parent == null;
+
   @override
   String toString() {
     return 'Node(content: $content, parent: $parent, children: $children, position: $position)';

@@ -13,6 +13,18 @@ class MindMapBubbel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (node.isRoot) {
+      return widgetBuilder(context);
+    }
+
+    return Positioned(
+      top: node.position.dy,
+      left: node.position.dx,
+      child: widgetBuilder(context),
+    );
+  }
+
+  Widget widgetBuilder(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(Spacing.medium),
       decoration: BoxDecoration(

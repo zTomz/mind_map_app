@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_mind/ui/common/theme_extension.dart';
 import 'package:open_mind/ui/views/mind_map/models/mind_map.dart';
 import 'package:open_mind/ui/widgets/common/mind_map/mind_map.dart';
 import 'package:stacked/stacked.dart';
@@ -30,7 +31,22 @@ class MindMapView extends StackedView<MindMapViewModel> {
         ],
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: MindMapWidget(mindMap: mindMap),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          // Create new node
+        },
+        label: Text(
+          "Create Node",
+          style: TextStyle(
+            color: context.colorScheme.onPrimaryContainer,
+          ),
+        ),
+        icon: Icon(
+          Icons.add,
+          color: context.colorScheme.onPrimaryContainer,
+        ),
+      ),
+      body: MindMapWidget(mindMap: viewModel.mindMap),
     );
   }
 
@@ -38,5 +54,7 @@ class MindMapView extends StackedView<MindMapViewModel> {
   MindMapViewModel viewModelBuilder(
     BuildContext context,
   ) =>
-      MindMapViewModel();
+      MindMapViewModel(
+        mindMap: mindMap,
+      );
 }
