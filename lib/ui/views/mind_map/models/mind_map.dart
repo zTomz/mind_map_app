@@ -17,4 +17,24 @@ class MindMap {
           name: name,
           createdAt: DateTime.now(),
         );
+
+  List<Node> getNodes() {
+    List<Node> nodes = [];
+
+    _traverse(root, nodes);
+
+    return nodes;
+  }
+
+  void _traverse(Node node, List<Node> nodes) {
+    nodes.add(node);
+    for (Node child in node.children) {
+      _traverse(child, nodes);
+    }
+  }
+
+  @override
+  String toString() {
+    return 'MindMap(root: $root, name: $name createdAt: $createdAt)';
+  }
 }

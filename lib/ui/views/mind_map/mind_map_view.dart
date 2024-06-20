@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_mind/ui/views/mind_map/models/mind_map.dart';
+import 'package:open_mind/ui/widgets/common/mind_map/mind_map.dart';
 import 'package:stacked/stacked.dart';
 
 import 'mind_map_viewmodel.dart';
@@ -20,7 +21,7 @@ class MindMapView extends StackedView<MindMapViewModel> {
   ) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(viewModel.mindMap.name),
+        title: Text(mindMap.name),
         actions: [
           IconButton(
             onPressed: () {},
@@ -29,9 +30,7 @@ class MindMapView extends StackedView<MindMapViewModel> {
         ],
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: Container(
-        padding: const EdgeInsets.only(left: 25.0, right: 25.0),
-      ),
+      body: MindMapWidget(mindMap: mindMap),
     );
   }
 
@@ -39,7 +38,5 @@ class MindMapView extends StackedView<MindMapViewModel> {
   MindMapViewModel viewModelBuilder(
     BuildContext context,
   ) =>
-      MindMapViewModel(
-        mindMap: mindMap,
-      );
+      MindMapViewModel();
 }

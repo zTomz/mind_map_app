@@ -1,21 +1,28 @@
+import 'dart:ui';
+
 class Node {
   final String content;
   final Node? parent;
   final List<Node> children;
-  final int level;
+  final Offset position;
 
   Node({
     required this.content,
-    this.parent,
     required this.children,
-    required this.level,
+    required this.position,
+    this.parent,
   });
 
   Node.root(String content)
       : this(
           content: content,
+          position: Offset.zero,
           parent: null,
           children: [],
-          level: 0,
         );
+
+  @override
+  String toString() {
+    return 'Node(content: $content, parent: $parent, children: $children, position: $position)';
+  }
 }
