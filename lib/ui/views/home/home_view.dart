@@ -37,7 +37,7 @@ class HomeView extends StackedView<HomeViewModel> {
           }
         },
         child: Icon(
-          Icons.add,
+          Icons.add_rounded,
           color: context.colorScheme.primary,
         ),
       ),
@@ -117,7 +117,7 @@ class HomeView extends StackedView<HomeViewModel> {
                         );
                       },
                       separatorBuilder: (_, __) => const SizedBox(
-                        height: Spacing.small,
+                        height: Spacing.medium / 2,
                       ),
                     ),
                   ),

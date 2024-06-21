@@ -4,6 +4,7 @@ import 'package:open_mind/app/app.dialogs.dart';
 import 'package:open_mind/app/app.locator.dart';
 import 'package:open_mind/app/app.router.dart';
 import 'package:open_mind/services/app_info_service.dart';
+import 'package:open_mind/ui/common/theme.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 Future<void> main() async {
@@ -29,6 +30,8 @@ class MainApp extends StatelessWidget {
       navigatorObservers: [
         StackedService.routeObserver,
       ],
+      theme:  MaterialTheme().light(),
+      darkTheme:  MaterialTheme().dark(),
     );
   }
 }

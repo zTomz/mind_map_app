@@ -19,10 +19,6 @@ class MindMapBubbel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (node.isRoot) {
-      return widgetBuilder(context);
-    }
-
     return Positioned(
       top: node.position.dy,
       left: node.position.dx,
@@ -37,7 +33,6 @@ class MindMapBubbel extends StatelessWidget {
       },
       onPanStart: (details) {
         onNodeSelected(node);
-        onNodeDragged(node, details.localPosition);
       },
       onPanUpdate: (details) {
         onNodeDragged(node, details.delta);
@@ -45,12 +40,12 @@ class MindMapBubbel extends StatelessWidget {
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: Container(
-          padding: const EdgeInsets.all(Spacing.medium),
+          padding: const EdgeInsets.symmetric(horizontal: Spacing.small, vertical: Spacing.small * 0.75),
           decoration: BoxDecoration(
             color: isSelected
-                ? Colors.red
+                ? context.colorScheme.primaryContainer
                 : context.colorScheme.secondaryContainer,
-            borderRadius: BorderRadius.circular(Radii.medium),
+            borderRadius: BorderRadius.circular(Radii.small),
           ),
           child: Text(node.content),
         ),

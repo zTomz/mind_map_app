@@ -33,7 +33,6 @@ class MindMapView extends StackedView<MindMapViewModel> {
           ),
         ],
       ),
-      backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           // Create new node

@@ -31,7 +31,6 @@ class TextFieldDialog extends StackedView<TextFieldDialogModel>
     TextFieldDialogModel viewModel,
     Widget? child,
   ) {
-   
     return MaterialDialog(
       title: request.title ?? "Error",
       icon: Icons.edit_rounded,

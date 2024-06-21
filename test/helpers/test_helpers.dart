@@ -78,6 +78,7 @@ MockAppInfoService getAndRegisterAppInfoService() {
   locator.registerSingleton<AppInfoService>(service);
   return service;
 }
+
 // @stacked-mock-create
 
 void _removeRegistrationIfExists<T extends Object>() {
