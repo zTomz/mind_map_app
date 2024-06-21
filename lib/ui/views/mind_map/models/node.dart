@@ -1,17 +1,20 @@
 import 'dart:ui';
 
+import 'package:uuid/uuid.dart';
+
 class Node {
   final String content;
   final Node? parent;
-  final List<Node> children;
-  final Offset position;
+  List<Node> children;
+  Offset position;
+  final String uuid;
 
   Node({
     required this.content,
     required this.children,
     required this.position,
-    this.parent,
-  });
+    required this.parent,
+  }) : uuid = const Uuid().v4();
 
   Node.root(String content)
       : this(
@@ -22,6 +25,14 @@ class Node {
         );
 
   bool get isRoot => parent == null;
+
+  void addChild(Node node) {
+    children.add(node);
+  }
+
+  void updatePosition(Offset offset) {
+    position += offset;
+  }
 
   @override
   String toString() {
