@@ -14,20 +14,22 @@ class MindMapPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    for (Node node in mindMap.getNodes()) {
+    for (Node node in mindMap.nodes) {
       if (node.isRoot) {
         continue;
       }
 
+      final parent = mindMap.nodes.firstWhere((n) => n.uuid == node.parentUuid);
+
       final nodeBubbleSize = MindMapWidget.calculateBubbleSize(node);
-      final parentBubbleSize = MindMapWidget.calculateBubbleSize(node.parent!);
+      final parentBubbleSize = MindMapWidget.calculateBubbleSize(parent);
 
       final nodePos = node.position +
           Offset(
             nodeBubbleSize.width / 2,
             nodeBubbleSize.height / 2,
           );
-      final parentPos = node.parent!.position +
+      final parentPos = parent.position +
           Offset(
             parentBubbleSize.width / 2,
             parentBubbleSize.height / 2,

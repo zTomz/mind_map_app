@@ -27,6 +27,44 @@ class MindMapView extends StackedView<MindMapViewModel> {
       appBar: AppBar(
         title: Text(mindMap.name),
         actions: [
+          if (viewModel.hasSelectedNode) ...[
+            IconButton(
+              onPressed: () async {
+                final result = await locator<DialogService>()
+                    .showCustomDialog<String, String>(
+                  variant: DialogType.textField,
+                  title: "Edit Node",
+                  data: "Node Content",
+                );
+
+                if (result != null && result.confirmed && result.data != null) {
+                  viewModel.editSelectedNode(content: result.data!);
+                }
+              },
+              tooltip: "Edit Node",
+              icon: const Icon(Icons.edit_rounded),
+            ),
+            if (!viewModel.selectedNode!.isRoot)
+              IconButton(
+                onPressed: () async {
+                  final result =
+                      await locator<DialogService>().showConfirmationDialog(
+                    title: "Are you sure?",
+                    description: "Are you sure you want to delete this node?",
+                    confirmationTitle: "Delete",
+                    confirmationTitleColor: context.colorScheme.error,
+                    cancelTitleColor: context.colorScheme.primary,
+                    dialogPlatform: DialogPlatform.Custom,
+                  );
+
+                  if (result?.confirmed ?? false) {
+                    viewModel.deleteSelectedNode();
+                  }
+                },
+                tooltip: "Delete Node",
+                icon: const Icon(Icons.delete_rounded),
+              ),
+          ],
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.more_vert),
@@ -42,6 +80,9 @@ class MindMapView extends StackedView<MindMapViewModel> {
             title: "Create New Node",
             data: "Node Content",
           );
+
+          // FIXME: dont add node if no node selected
+          // TODO: Change selected node to the new one
 
           if (result != null && result.confirmed && result.data != null) {
             viewModel.addNodeToSelectedNode(result.data!);

@@ -12,6 +12,7 @@ class MindMapViewModel extends BaseViewModel {
   });
 
   Node? selectedNode;
+  bool get hasSelectedNode => selectedNode != null;
 
   void selectNode(Node node) {
     selectedNode = node;
@@ -23,14 +24,51 @@ class MindMapViewModel extends BaseViewModel {
       throw Exception("No node selected");
     }
 
-    selectedNode!.addChild(
-      Node(
-        content: content,
-        children: [],
-        position: Offset.zero,
-        parent: selectedNode,
-      ),
+    final newNode = Node.fromParams(
+      content: content,
+      childrenUuids: [],
+      position: Offset.zero,
+      parentUuid: selectedNode!.uuid,
     );
+
+    mindMap.addNode(newNode, selectedNode!);
+
+    rebuildUi();
+  }
+
+  void editSelectedNode({
+    String? content,
+    String? parent,
+    List<String>? children,
+    Offset? position,
+  }) {
+    if (selectedNode == null) {
+      throw Exception("No node selected");
+    }
+
+    final newNode = selectedNode!.copyWith(
+      content: content,
+      parentUuid: parent,
+      childrenUuids: children,
+      position: position,
+    );
+
+    mindMap = mindMap.copyWith(
+      nodes: mindMap.nodes
+          .map((node) => node.uuid == selectedNode!.uuid ? newNode : node)
+          .toList(),
+    );
+
+    rebuildUi();
+  }
+
+  void deleteSelectedNode() {
+    if (selectedNode == null) {
+      throw Exception("No node selected");
+    }
+
+    mindMap.deleteNode(selectedNode!.uuid);
+
     rebuildUi();
   }
 

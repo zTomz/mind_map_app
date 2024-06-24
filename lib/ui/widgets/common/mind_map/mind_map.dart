@@ -38,14 +38,14 @@ class MindMapWidget extends StackedView<MindMapModel> {
             painter: MindMapPainter(mindMap: mindMap),
           ),
         ),
-        ...mindMap.getNodes().map(
-              (node) => MindMapBubbel(
-                node: node,
-                isSelected: selectedNode == node,
-                onNodeSelected: onNodeSelected,
-                onNodeDragged: onNodeDragged,
-              ),
-            ),
+        ...mindMap.nodes.map(
+          (node) => MindMapBubbel(
+            node: node,
+            isSelected: selectedNode?.uuid == node.uuid,
+            onNodeSelected: onNodeSelected,
+            onNodeDragged: onNodeDragged,
+          ),
+        ),
       ],
     );
   }

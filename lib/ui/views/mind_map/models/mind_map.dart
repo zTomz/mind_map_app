@@ -1,40 +1,73 @@
+// ignore: depend_on_referenced_packages
+import 'package:collection/collection.dart';
 import 'package:open_mind/ui/views/mind_map/models/node.dart';
 
 class MindMap {
-  final Node root;
+  List<Node> nodes;
   final String name;
   final DateTime createdAt;
 
   MindMap({
-    required this.root,
+    required this.nodes,
     required this.name,
     required this.createdAt,
   });
 
-  MindMap.fromName({required String name})
-      : this(
-          root: Node.root(name),
+  MindMap.fromName({
+    required String name,
+  }) : this(
+          nodes: [
+            Node.root(name),
+          ],
           name: name,
           createdAt: DateTime.now(),
         );
 
-  List<Node> getNodes() {
-    List<Node> nodes = [];
-
-    _traverse(root, nodes);
-
-    return nodes;
+  void addNode(Node node, Node selectedNode) {
+    nodes.add(node);
+    selectedNode.addChild(node.uuid);
   }
 
-  void _traverse(Node node, List<Node> nodes) {
-    nodes.add(node);
-    for (Node child in node.children) {
-      _traverse(child, nodes);
+  Node? _findNodeByUuid(String uuid) {
+    return nodes.firstWhereOrNull((node) => node.uuid == uuid);
+  }
+
+  void deleteNode(String uuid) {
+    Node? nodeToDelete = _findNodeByUuid(uuid);
+
+    if (nodeToDelete != null) {
+      // Delete children recursively
+      for (String childUuid in List.from(nodeToDelete.childrenUuids)) {
+        deleteNode(childUuid);
+      }
+
+      // Delete the node
+      nodes.removeWhere((node) => node.uuid == uuid);
+
+      // Remove reference from parent
+      if (nodeToDelete.parentUuid != null) {
+        Node? parentNode = _findNodeByUuid(nodeToDelete.parentUuid!);
+        if (parentNode != null) {
+          parentNode.childrenUuids.remove(uuid);
+        }
+      }
     }
+  }
+
+  MindMap copyWith({
+    List<Node>? nodes,
+    String? name,
+    DateTime? createdAt,
+  }) {
+    return MindMap(
+      nodes: nodes ?? this.nodes,
+      name: name ?? this.name,
+      createdAt: createdAt ?? this.createdAt,
+    );
   }
 
   @override
   String toString() {
-    return 'MindMap(root: $root, name: $name createdAt: $createdAt)';
+    return 'MindMap(nodes: $nodes, name: $name createdAt: $createdAt)';
   }
 }
