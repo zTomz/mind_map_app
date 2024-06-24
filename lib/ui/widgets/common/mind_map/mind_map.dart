@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_mind/ui/common/ui_helpers.dart';
 import 'package:open_mind/ui/views/mind_map/models/mind_map.dart';
 import 'package:open_mind/ui/views/mind_map/models/node.dart';
 import 'package:open_mind/ui/widgets/common/mind_map/mind_map_bubbel.dart';
@@ -54,4 +55,18 @@ class MindMapWidget extends StackedView<MindMapModel> {
     BuildContext context,
   ) =>
       MindMapModel();
+
+  static Size calculateBubbleSize(Node node) {
+    final textPainter = TextPainter(
+      text: TextSpan(text: node.content),
+      textDirection: TextDirection.ltr,
+    );
+    textPainter.layout();
+    final textSize = textPainter.size;
+
+    return Size(
+      textSize.width + Spacing.small * 2,
+      textSize.height + (Spacing.small * 0.75) * 2,
+    );
+  }
 }

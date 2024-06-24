@@ -40,11 +40,12 @@ class MindMapBubbel extends StatelessWidget {
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: Spacing.small, vertical: Spacing.small * 0.75),
+          padding: const EdgeInsets.symmetric(
+              horizontal: Spacing.small, vertical: Spacing.small * 0.75),
           decoration: BoxDecoration(
             color: isSelected
-                ? context.colorScheme.primaryContainer
-                : context.colorScheme.secondaryContainer,
+                ? context.colorScheme.tertiaryContainer
+                : context.colorScheme.primaryContainer,
             borderRadius: BorderRadius.circular(Radii.small),
           ),
           child: Text(node.content),
