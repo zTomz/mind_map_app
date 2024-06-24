@@ -10,7 +10,7 @@ import 'mind_map_model.dart';
 
 class MindMapWidget extends StackedView<MindMapModel> {
   final MindMap mindMap;
-  final Node? selectedNode;
+  final String? selectedNodeUuid;
   final Offset mindMapOffset;
   final void Function(Node node) onNodeSelected;
   final void Function(Node node, Offset offset) onNodeDragged;
@@ -18,7 +18,7 @@ class MindMapWidget extends StackedView<MindMapModel> {
   const MindMapWidget({
     super.key,
     required this.mindMap,
-    required this.selectedNode,
+    required this.selectedNodeUuid,
     this.mindMapOffset = Offset.zero,
     required this.onNodeSelected,
     required this.onNodeDragged,
@@ -41,7 +41,7 @@ class MindMapWidget extends StackedView<MindMapModel> {
         ...mindMap.nodes.map(
           (node) => MindMapBubbel(
             node: node,
-            isSelected: selectedNode?.uuid == node.uuid,
+            isSelected: selectedNodeUuid == node.uuid,
             onNodeSelected: onNodeSelected,
             onNodeDragged: onNodeDragged,
           ),

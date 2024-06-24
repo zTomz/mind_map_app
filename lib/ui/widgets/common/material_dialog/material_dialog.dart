@@ -7,6 +7,8 @@ class MaterialDialog extends StatelessWidget {
   final Widget body;
   final void Function() onConfirm;
   final void Function() onCancel;
+  final String primaryButtonText;
+  final String secondaryButtonText;
 
   const MaterialDialog({
     super.key,
@@ -15,6 +17,8 @@ class MaterialDialog extends StatelessWidget {
     required this.body,
     required this.onConfirm,
     required this.onCancel,
+    required this.primaryButtonText,
+    required this.secondaryButtonText,
   });
 
   @override
@@ -47,12 +51,12 @@ class MaterialDialog extends StatelessWidget {
           children: [
             TextButton(
               onPressed: onCancel,
-              child: const Text('Cancel'),
+              child: Text(secondaryButtonText),
             ),
             const SizedBox(width: 12),
             FilledButton.tonal(
               onPressed: onConfirm,
-              child: const Text('Create'),
+              child: Text(primaryButtonText),
             ),
           ],
         ),

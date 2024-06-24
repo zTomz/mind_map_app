@@ -11,15 +11,25 @@ class MindMapViewModel extends BaseViewModel {
     required this.mindMap,
   });
 
-  Node? selectedNode;
+  /// The uuid of the selected node
+  String? selectedNode;
   bool get hasSelectedNode => selectedNode != null;
 
   void selectNode(Node node) {
-    selectedNode = node;
+    selectedNode = node.uuid;
     rebuildUi();
   }
 
-  void addNodeToSelectedNode(String content) {
+  Node? findNodeByUuid(String? uuid) {
+    if (uuid == null) {
+      return null;
+    }
+
+    return mindMap.findNodeByUuid(uuid);
+  }
+
+  /// Adds a new node to the selected node, returns the new node
+  Node addNodeToSelectedNode(String content) {
     if (selectedNode == null) {
       throw Exception("No node selected");
     }
@@ -28,12 +38,14 @@ class MindMapViewModel extends BaseViewModel {
       content: content,
       childrenUuids: [],
       position: Offset.zero,
-      parentUuid: selectedNode!.uuid,
+      parentUuid: selectedNode!,
     );
 
     mindMap.addNode(newNode, selectedNode!);
 
     rebuildUi();
+
+    return newNode;
   }
 
   void editSelectedNode({
@@ -46,7 +58,7 @@ class MindMapViewModel extends BaseViewModel {
       throw Exception("No node selected");
     }
 
-    final newNode = selectedNode!.copyWith(
+    final newNode = findNodeByUuid(selectedNode!)!.copyWith(
       content: content,
       parentUuid: parent,
       childrenUuids: children,
@@ -55,7 +67,7 @@ class MindMapViewModel extends BaseViewModel {
 
     mindMap = mindMap.copyWith(
       nodes: mindMap.nodes
-          .map((node) => node.uuid == selectedNode!.uuid ? newNode : node)
+          .map((node) => node.uuid == selectedNode! ? newNode : node)
           .toList(),
     );
 
@@ -67,7 +79,8 @@ class MindMapViewModel extends BaseViewModel {
       throw Exception("No node selected");
     }
 
-    mindMap.deleteNode(selectedNode!.uuid);
+    mindMap.deleteNode(selectedNode!);
+    selectedNode = null;
 
     rebuildUi();
   }

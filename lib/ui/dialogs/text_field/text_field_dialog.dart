@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:open_mind/ui/common/theme_extension.dart';
 import 'package:open_mind/ui/dialogs/text_field/basic_validator.dart';
 import 'package:open_mind/ui/dialogs/text_field/text_field_dialog.form.dart';
+import 'package:open_mind/ui/dialogs/text_field/text_field_dialog_request_data.dart';
 import 'package:open_mind/ui/dialogs/text_field/text_field_model.dart';
 import 'package:open_mind/ui/widgets/common/material_dialog/material_dialog.dart';
 import 'package:stacked/stacked.dart';
@@ -19,11 +20,14 @@ class TextFieldDialog extends StackedView<TextFieldDialogModel>
   final DialogRequest request;
   final Function(DialogResponse) completer;
 
-  const TextFieldDialog({
+  final TextFieldDialogRequestData data;
+
+  TextFieldDialog({
     Key? key,
     required this.request,
     required this.completer,
-  }) : super(key: key);
+  })  : data = request.data as TextFieldDialogRequestData,
+        super(key: key);
 
   @override
   Widget builder(
@@ -32,8 +36,10 @@ class TextFieldDialog extends StackedView<TextFieldDialogModel>
     Widget? child,
   ) {
     return MaterialDialog(
-      title: request.title ?? "Error",
+      title: data.title,
       icon: Icons.edit_rounded,
+      primaryButtonText: data.primaryButtonText,
+      secondaryButtonText: data.secondaryButtonText,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -41,7 +47,7 @@ class TextFieldDialog extends StackedView<TextFieldDialogModel>
             controller: textController,
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
-              hintText: request.data,
+              hintText: data.hintText,
             ),
           ),
           if (viewModel.hasTextValidationMessage) ...[
@@ -80,6 +86,7 @@ class TextFieldDialog extends StackedView<TextFieldDialogModel>
 
   @override
   void onViewModelReady(TextFieldDialogModel viewModel) {
+    textController.text = data.prefillText ?? '';
     syncFormWithViewModel(viewModel);
   }
 

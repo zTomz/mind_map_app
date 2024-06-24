@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:open_mind/app/app.dialogs.dart';
 import 'package:open_mind/app/app.locator.dart';
 import 'package:open_mind/ui/common/theme_extension.dart';
+import 'package:open_mind/ui/dialogs/text_field/text_field_dialog_request_data.dart';
 import 'package:open_mind/ui/views/mind_map/models/mind_map.dart';
 import 'package:open_mind/ui/widgets/common/mind_map/mind_map.dart';
 import 'package:stacked/stacked.dart';
@@ -30,11 +31,19 @@ class MindMapView extends StackedView<MindMapViewModel> {
           if (viewModel.hasSelectedNode) ...[
             IconButton(
               onPressed: () async {
+                final data = TextFieldDialogRequestData(
+                  title: 'Edit Node',
+                  hintText: 'Node Content',
+                  prefillText: viewModel
+                      .findNodeByUuid(viewModel.selectedNode!)!
+                      .content,
+                  primaryButtonText: 'Edit',
+                );
+
                 final result = await locator<DialogService>()
-                    .showCustomDialog<String, String>(
+                    .showCustomDialog<String, TextFieldDialogRequestData>(
                   variant: DialogType.textField,
-                  title: "Edit Node",
-                  data: "Node Content",
+                  data: data,
                 );
 
                 if (result != null && result.confirmed && result.data != null) {
@@ -44,7 +53,8 @@ class MindMapView extends StackedView<MindMapViewModel> {
               tooltip: "Edit Node",
               icon: const Icon(Icons.edit_rounded),
             ),
-            if (!viewModel.selectedNode!.isRoot)
+            if (!(viewModel.findNodeByUuid(viewModel.selectedNode)?.isRoot ??
+                false))
               IconButton(
                 onPressed: () async {
                   final result =
@@ -71,37 +81,39 @@ class MindMapView extends StackedView<MindMapViewModel> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          // Create new node
-          final result =
-              await locator<DialogService>().showCustomDialog<String, String>(
-            variant: DialogType.textField,
-            title: "Create New Node",
-            data: "Node Content",
-          );
+      floatingActionButton: viewModel.hasSelectedNode
+          ? FloatingActionButton.extended(
+              onPressed: () async {
+                // Create new node
+                final result = await locator<DialogService>()
+                    .showCustomDialog<String, TextFieldDialogRequestData>(
+                  variant: DialogType.textField,
+                  data: const TextFieldDialogRequestData(
+                    title: 'Create New Node',
+                    hintText: 'Node Content',
+                  ),
+                );
 
-          // FIXME: dont add node if no node selected
-          // TODO: Change selected node to the new one
-
-          if (result != null && result.confirmed && result.data != null) {
-            viewModel.addNodeToSelectedNode(result.data!);
-          }
-        },
-        label: Text(
-          "Create Node",
-          style: TextStyle(
-            color: context.colorScheme.onPrimaryContainer,
-          ),
-        ),
-        icon: Icon(
-          Icons.add,
-          color: context.colorScheme.onPrimaryContainer,
-        ),
-      ),
+                if (result != null && result.confirmed && result.data != null) {
+                  final newNode = viewModel.addNodeToSelectedNode(result.data!);
+                  viewModel.selectNode(newNode);
+                }
+              },
+              label: Text(
+                "Create Node",
+                style: TextStyle(
+                  color: context.colorScheme.onPrimaryContainer,
+                ),
+              ),
+              icon: Icon(
+                Icons.add,
+                color: context.colorScheme.onPrimaryContainer,
+              ),
+            )
+          : null,
       body: MindMapWidget(
         mindMap: viewModel.mindMap,
-        selectedNode: viewModel.selectedNode,
+        selectedNodeUuid: viewModel.selectedNode,
         onNodeSelected: (node) {
           viewModel.selectNode(node);
         },

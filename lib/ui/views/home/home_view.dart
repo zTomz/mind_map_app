@@ -5,6 +5,7 @@ import 'package:open_mind/app/app.router.dart';
 import 'package:open_mind/services/app_info_service.dart';
 import 'package:open_mind/ui/common/theme_extension.dart';
 import 'package:open_mind/ui/common/ui_helpers.dart';
+import 'package:open_mind/ui/dialogs/text_field/text_field_dialog_request_data.dart';
 import 'package:open_mind/ui/views/mind_map/models/mind_map.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -23,11 +24,14 @@ class HomeView extends StackedView<HomeViewModel> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.large(
         onPressed: () async {
-          final result =
-              await locator<DialogService>().showCustomDialog<String, String>(
+          final result = await locator<DialogService>()
+              .showCustomDialog<String, TextFieldDialogRequestData>(
             variant: DialogType.textField,
             title: "Create New Mind Map",
-            data: "Mind Map Name",
+            data: const TextFieldDialogRequestData(
+              title: 'Create New Mind Map',
+              hintText: 'Mind Map Name',
+            ),
           );
 
           if (result != null && result.confirmed && result.data != null) {

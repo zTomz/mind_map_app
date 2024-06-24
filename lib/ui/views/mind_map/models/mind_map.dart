@@ -23,17 +23,19 @@ class MindMap {
           createdAt: DateTime.now(),
         );
 
-  void addNode(Node node, Node selectedNode) {
+  void addNode(Node node, String selectedNodeUuid) {
     nodes.add(node);
+
+    final selectedNode = findNodeByUuid(selectedNodeUuid)!;
     selectedNode.addChild(node.uuid);
   }
 
-  Node? _findNodeByUuid(String uuid) {
+  Node? findNodeByUuid(String uuid) {
     return nodes.firstWhereOrNull((node) => node.uuid == uuid);
   }
 
   void deleteNode(String uuid) {
-    Node? nodeToDelete = _findNodeByUuid(uuid);
+    Node? nodeToDelete = findNodeByUuid(uuid);
 
     if (nodeToDelete != null) {
       // Delete children recursively
@@ -46,7 +48,7 @@ class MindMap {
 
       // Remove reference from parent
       if (nodeToDelete.parentUuid != null) {
-        Node? parentNode = _findNodeByUuid(nodeToDelete.parentUuid!);
+        Node? parentNode = findNodeByUuid(nodeToDelete.parentUuid!);
         if (parentNode != null) {
           parentNode.childrenUuids.remove(uuid);
         }
