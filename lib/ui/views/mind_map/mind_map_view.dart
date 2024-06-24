@@ -96,7 +96,7 @@ class MindMapView extends StackedView<MindMapViewModel> {
 
                 if (result != null && result.confirmed && result.data != null) {
                   final newNode = viewModel.addNodeToSelectedNode(result.data!);
-                  viewModel.selectNode(newNode);
+                  viewModel.selectNode(newNode.uuid);
                 }
               },
               label: Text(
@@ -115,11 +115,12 @@ class MindMapView extends StackedView<MindMapViewModel> {
         mindMap: viewModel.mindMap,
         selectedNodeUuid: viewModel.selectedNode,
         onNodeSelected: (node) {
-          viewModel.selectNode(node);
+          viewModel.selectNode(node.uuid);
         },
         onNodeDragged: (node, offset) {
           viewModel.dragNode(node, offset);
         },
+        onPan: (_) => viewModel.selectNode(null),
       ),
     );
   }

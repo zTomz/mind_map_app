@@ -15,8 +15,8 @@ class MindMapViewModel extends BaseViewModel {
   String? selectedNode;
   bool get hasSelectedNode => selectedNode != null;
 
-  void selectNode(Node node) {
-    selectedNode = node.uuid;
+  void selectNode(String? nodeUuid) {
+    selectedNode = nodeUuid;
     rebuildUi();
   }
 

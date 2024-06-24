@@ -7,9 +7,11 @@ import 'package:open_mind/ui/widgets/common/mind_map/mind_map.dart';
 
 class MindMapPainter extends CustomPainter {
   final MindMap mindMap;
+  final Offset panningOffset;
 
   MindMapPainter({
     required this.mindMap,
+    required this.panningOffset,
   });
 
   @override
@@ -28,12 +30,12 @@ class MindMapPainter extends CustomPainter {
           Offset(
             nodeBubbleSize.width / 2,
             nodeBubbleSize.height / 2,
-          );
+          ) + panningOffset;
       final parentPos = parent.position +
           Offset(
             parentBubbleSize.width / 2,
             parentBubbleSize.height / 2,
-          );
+          ) + panningOffset;
 
       final rect = Rect.fromLTRB(
         math.min(nodePos.dx, parentPos.dx),

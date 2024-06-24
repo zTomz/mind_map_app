@@ -8,6 +8,7 @@ class MindMapBubbel extends StatelessWidget {
   final bool isSelected;
   final void Function(Node node) onNodeSelected;
   final void Function(Node node, Offset offset) onNodeDragged;
+  final Offset panningOffset;
 
   const MindMapBubbel({
     super.key,
@@ -15,13 +16,14 @@ class MindMapBubbel extends StatelessWidget {
     required this.isSelected,
     required this.onNodeSelected,
     required this.onNodeDragged,
+    required this.panningOffset,
   });
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: node.position.dy,
-      left: node.position.dx,
+      top: node.position.dy + panningOffset.dy,
+      left: node.position.dx + panningOffset.dx,
       child: widgetBuilder(context),
     );
   }

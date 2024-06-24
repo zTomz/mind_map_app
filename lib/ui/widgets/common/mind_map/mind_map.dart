@@ -14,6 +14,7 @@ class MindMapWidget extends StackedView<MindMapModel> {
   final Offset mindMapOffset;
   final void Function(Node node) onNodeSelected;
   final void Function(Node node, Offset offset) onNodeDragged;
+  final void Function(Offset offset) onPan;
 
   const MindMapWidget({
     super.key,
@@ -22,6 +23,7 @@ class MindMapWidget extends StackedView<MindMapModel> {
     this.mindMapOffset = Offset.zero,
     required this.onNodeSelected,
     required this.onNodeDragged,
+    required this.onPan,
   });
 
   @override
@@ -30,23 +32,41 @@ class MindMapWidget extends StackedView<MindMapModel> {
     MindMapModel viewModel,
     Widget? child,
   ) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Positioned.fill(
-          child: CustomPaint(
-            painter: MindMapPainter(mindMap: mindMap),
-          ),
+    return GestureDetector(
+      onPanUpdate: (details) {
+        viewModel.updatePanningOffset(details.delta);
+        onPan(details.delta);
+      },
+      onPanEnd: (details) {
+        viewModel.setPanning(false);
+      },
+      child: MouseRegion(
+        cursor: viewModel.isPanning
+            ? SystemMouseCursors.move
+            : SystemMouseCursors.basic,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Positioned.fill(
+              child: CustomPaint(
+                painter: MindMapPainter(
+                  mindMap: mindMap,
+                  panningOffset: viewModel.panningOffset,
+                ),
+              ),
+            ),
+            ...mindMap.nodes.map(
+              (node) => MindMapBubbel(
+                node: node,
+                isSelected: selectedNodeUuid == node.uuid,
+                onNodeSelected: onNodeSelected,
+                onNodeDragged: onNodeDragged,
+                panningOffset: viewModel.panningOffset,
+              ),
+            ),
+          ],
         ),
-        ...mindMap.nodes.map(
-          (node) => MindMapBubbel(
-            node: node,
-            isSelected: selectedNodeUuid == node.uuid,
-            onNodeSelected: onNodeSelected,
-            onNodeDragged: onNodeDragged,
-          ),
-        ),
-      ],
+      ),
     );
   }
 
