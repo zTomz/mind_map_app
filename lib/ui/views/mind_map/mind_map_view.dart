@@ -3,6 +3,7 @@ import 'package:open_mind/app/app.dialogs.dart';
 import 'package:open_mind/app/app.locator.dart';
 import 'package:open_mind/app/app.router.dart';
 import 'package:open_mind/ui/common/theme_extension.dart';
+import 'package:open_mind/ui/common/ui_helpers.dart';
 import 'package:open_mind/ui/dialogs/text_field/text_field_dialog_request_data.dart';
 import 'package:open_mind/ui/views/mind_map/models/mind_map.dart';
 import 'package:open_mind/ui/widgets/common/editable_text/editable_text_widget.dart';
@@ -31,8 +32,13 @@ class MindMapView extends StackedView<MindMapViewModel> {
         title: EditableTextWidget(
           text: mindMap.name,
           onChanged: (value) async {
-            if (value.length <= MindMap.minNameLength) {
-              // TODO: Show a snack bar, that the title has to be at least [MindMap.minNameLength] characters
+            if (value.length < MindMap.minNameLength) {
+              ScaffoldMessenger.of(context).clearSnackBars();
+              showMaterialSnackBar(
+                context,
+                message:
+                    'The mind map name has to be at least ${MindMap.minNameLength} characters long',
+              );
               return;
             }
 

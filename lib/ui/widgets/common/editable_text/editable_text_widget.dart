@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_mind/ui/common/theme_extension.dart';
 
-
 class EditableTextWidget extends StatelessWidget {
   /// The text to display, which is editable
   final String text;

@@ -1,3 +1,6 @@
+// TODO: Change the font
+// TODO: Create an app icon
+
 import 'package:flutter/material.dart';
 import 'package:open_mind/app/app.bottomsheets.dart';
 import 'package:open_mind/app/app.dialogs.dart';

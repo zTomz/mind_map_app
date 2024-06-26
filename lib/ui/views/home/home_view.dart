@@ -124,6 +124,24 @@ class HomeView extends StackedView<HomeViewModel> {
                                 trailing: IconButton(
                                   onPressed: () async {
                                     await viewModel.deleteMindMap(mindMap);
+
+                                    // Check if we can show a snack bar, if not we recreate the mind map
+                                    if (context.mounted) {
+                                      showMaterialSnackBar(
+                                        context,
+                                        message:
+                                            'Deleted mind map "${mindMap.name}" successfully',
+                                        action: SnackBarAction(
+                                          label: "Undo",
+                                          onPressed: () async {
+                                            await viewModel
+                                                .createNewMindMap(mindMap);
+                                          },
+                                        ),
+                                      );
+                                    } else {
+                                      await viewModel.createNewMindMap(mindMap);
+                                    }
                                   },
                                   icon: const Icon(Icons.delete_outlined),
                                 ),
