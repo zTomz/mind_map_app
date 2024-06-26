@@ -45,6 +45,8 @@ class TextFieldDialog extends StackedView<TextFieldDialogModel>
         children: [
           TextFormField(
             controller: textController,
+            maxLines: 5,
+            minLines: 1,
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               hintText: data.hintText,
@@ -68,7 +70,7 @@ class TextFieldDialog extends StackedView<TextFieldDialogModel>
         completer(
           DialogResponse<String>(
             confirmed: true,
-            data: textController.text,
+            data: textController.text.trim(),
           ),
         );
       },

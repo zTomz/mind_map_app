@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:open_mind/ui/common/exeptions/invalid_node_edit.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:open_mind/ui/views/mind_map/models/node.dart';
 
 class MindMap {
-  final String name;
+  String name;
   List<Node> nodes;
   final DateTime createdAt;
   final DateTime lastEditedAt;
@@ -34,6 +35,17 @@ class MindMap {
           uuid: const Uuid().v4(),
         );
 
+  static const int minNameLength = 3;
+
+  /// Update the name of the mind map and the content of the root node
+  void updateName(String newName) {
+    // Update the name of the mind map
+    name = newName;
+
+    // Rename the root node
+    nodes.firstWhere((node) => node.isRoot).content = newName;
+  }
+
   /// Edit the provided node with the given params
   void editNode(
     Node node, {
@@ -43,6 +55,12 @@ class MindMap {
     Offset? position,
     String? uuid,
   }) {
+    if (content != null && content.length <= 3) {
+      throw const InvalidNodeEditException(
+        message: 'Content must be longer than 3 characters',
+      );
+    }
+
     final editedNode = node.copyWith(
       content: content,
       parentUuid: parentUuid,
@@ -51,16 +69,25 @@ class MindMap {
       uuid: uuid,
     );
 
+    // Remove the old node and add the new one
     deleteNode(node.uuid);
-    addNode(editedNode, node.parentUuid!);
+    addNode(editedNode, node.parentUuid);
+
+    // If the node is the root node and the content is edited, update the name
+    // of the mind map too
+    if (editedNode.isRoot && content != null) {
+      name = editedNode.content;
+    }
   }
 
   /// Adds a new node to the selected node
-  void addNode(Node node, String selectedNodeUuid) {
+  void addNode(Node node, String? selectedNodeUuid) {
     nodes.add(node);
 
-    final selectedNode = findNodeByUuid(selectedNodeUuid)!;
-    selectedNode.addChild(node.uuid);
+    if (selectedNodeUuid != null) {
+      final selectedNode = findNodeByUuid(selectedNodeUuid)!;
+      selectedNode.addChild(node.uuid);
+    }
   }
 
   /// Finds a node by its uuid. If no node is found, returns `null`

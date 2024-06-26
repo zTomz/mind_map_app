@@ -5,6 +5,7 @@ import 'package:open_mind/app/app.router.dart';
 import 'package:open_mind/ui/common/theme_extension.dart';
 import 'package:open_mind/ui/dialogs/text_field/text_field_dialog_request_data.dart';
 import 'package:open_mind/ui/views/mind_map/models/mind_map.dart';
+import 'package:open_mind/ui/widgets/common/editable_text/editable_text_widget.dart';
 import 'package:open_mind/ui/widgets/common/mind_map/mind_map.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -27,7 +28,17 @@ class MindMapView extends StackedView<MindMapViewModel> {
   ) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(mindMap.name),
+        title: EditableTextWidget(
+          text: mindMap.name,
+          onChanged: (value) async {
+            if (value.length <= MindMap.minNameLength) {
+              // TODO: Show a snack bar, that the title has to be at least [MindMap.minNameLength] characters
+              return;
+            }
+
+            await viewModel.updateMindMapName(value);
+          },
+        ),
         leading: BackButton(
           onPressed: () async {
             await viewModel.saveMindMap();

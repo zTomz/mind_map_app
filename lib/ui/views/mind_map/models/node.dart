@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 class Node {
-  final String content;
+  String content;
   final String? parentUuid;
   List<String> childrenUuids;
   Offset position;

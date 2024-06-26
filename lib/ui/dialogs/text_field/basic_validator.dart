@@ -1,10 +1,12 @@
+import 'package:open_mind/ui/views/mind_map/models/mind_map.dart';
+
 class BasicValidator {
   static String? validateText(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'The text cannot be empty';
     }
 
-    if (value.trim().length < 3 || value.trim().length > 30) {
+    if (value.trim().length < MindMap.minNameLength) {
       return 'Name must be at least 3 characters long';
     }
 

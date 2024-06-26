@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:open_mind/app/app.locator.dart';
 import 'package:open_mind/services/database_handler_service.dart';
+import 'package:open_mind/ui/common/exeptions/no_node_selected.dart';
 import 'package:open_mind/ui/views/mind_map/models/mind_map.dart';
 import 'package:open_mind/ui/views/mind_map/models/node.dart';
 import 'package:stacked/stacked.dart';
@@ -28,6 +29,13 @@ class MindMapViewModel extends BaseViewModel {
     }
 
     return mindMap.findNodeByUuid(uuid);
+  }
+
+  Future<void> updateMindMapName(String newName) async {
+    mindMap.updateName(newName);
+    await saveMindMap();
+
+    rebuildUi();
   }
 
   /// Adds a new node to the selected node, returns the new node
@@ -105,14 +113,5 @@ class MindMapViewModel extends BaseViewModel {
         ),
       ),
     );
-  }
-}
-
-class NoNodeSelectedException implements Exception {
-  const NoNodeSelectedException();
-
-  @override
-  String toString() {
-    return "No node selected";
   }
 }

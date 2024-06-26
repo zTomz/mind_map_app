@@ -15,14 +15,16 @@ class HomeViewModel extends BaseViewModel {
   }
 
   Future<void> deleteMindMap(MindMap mindMap) async {
-    await runBusyFuture<void>(locator<DatabaseHandlerService>().deleteMindMap(mindMap.uuid));
+    await runBusyFuture<void>(
+        locator<DatabaseHandlerService>().deleteMindMap(mindMap.uuid));
     mindMaps.removeWhere((element) => element.uuid == mindMap.uuid);
 
     rebuildUi();
   }
 
   Future<void> createNewMindMap(MindMap mindMap) async {
-    await runBusyFuture<void>(locator<DatabaseHandlerService>().saveMindMap(mindMap));
+    await runBusyFuture<void>(
+        locator<DatabaseHandlerService>().saveMindMap(mindMap));
     mindMaps.add(mindMap);
 
     rebuildUi();
