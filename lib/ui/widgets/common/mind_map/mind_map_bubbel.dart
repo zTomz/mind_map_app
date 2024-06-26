@@ -8,6 +8,7 @@ class MindMapBubbel extends StatelessWidget {
   final bool isSelected;
   final void Function(Node node) onNodeSelected;
   final void Function(Node node, Offset offset) onNodeDragged;
+  final void Function() onNodeDragEnd;
   final Offset panningOffset;
 
   const MindMapBubbel({
@@ -16,6 +17,7 @@ class MindMapBubbel extends StatelessWidget {
     required this.isSelected,
     required this.onNodeSelected,
     required this.onNodeDragged,
+    required this.onNodeDragEnd,
     required this.panningOffset,
   });
 
@@ -38,6 +40,9 @@ class MindMapBubbel extends StatelessWidget {
       },
       onPanUpdate: (details) {
         onNodeDragged(node, details.delta);
+      },
+      onPanEnd: (details) {
+        onNodeDragEnd();
       },
       child: MouseRegion(
         cursor: SystemMouseCursors.click,

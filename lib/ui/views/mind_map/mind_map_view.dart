@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:open_mind/app/app.dialogs.dart';
 import 'package:open_mind/app/app.locator.dart';
-import 'package:open_mind/services/database_handler_service.dart';
+import 'package:open_mind/app/app.router.dart';
 import 'package:open_mind/ui/common/theme_extension.dart';
 import 'package:open_mind/ui/dialogs/text_field/text_field_dialog_request_data.dart';
 import 'package:open_mind/ui/views/mind_map/models/mind_map.dart';
@@ -30,8 +30,8 @@ class MindMapView extends StackedView<MindMapViewModel> {
         title: Text(mindMap.name),
         leading: BackButton(
           onPressed: () async {
-            await locator<DatabaseHandlerService>().saveMindMap(mindMap);
-            locator<NavigationService>().back();
+            await viewModel.saveMindMap();
+            locator<NavigationService>().clearStackAndShow(Routes.homeView);
           },
         ),
         actions: [
@@ -75,17 +75,13 @@ class MindMapView extends StackedView<MindMapViewModel> {
                   );
 
                   if (result?.confirmed ?? false) {
-                    viewModel.deleteSelectedNode();
+                    await viewModel.deleteSelectedNode();
                   }
                 },
                 tooltip: "Delete Node",
                 icon: const Icon(Icons.delete_rounded),
               ),
           ],
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.more_vert),
-          ),
         ],
       ),
       floatingActionButton: viewModel.hasSelectedNode
@@ -102,7 +98,9 @@ class MindMapView extends StackedView<MindMapViewModel> {
                 );
 
                 if (result != null && result.confirmed && result.data != null) {
-                  final newNode = viewModel.addNodeToSelectedNode(result.data!);
+                  final newNode = await viewModel.addNodeToSelectedNode(
+                    result.data!,
+                  );
                   viewModel.selectNode(newNode.uuid);
                 }
               },
@@ -127,6 +125,7 @@ class MindMapView extends StackedView<MindMapViewModel> {
         onNodeDragged: (node, offset) {
           viewModel.dragNode(node, offset);
         },
+        onNodeDragEnd: () async => await viewModel.saveMindMap(),
         onPan: (_) => viewModel.selectNode(null),
       ),
     );

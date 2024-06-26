@@ -1,5 +1,6 @@
 // ignore: depend_on_referenced_packages
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:uuid/uuid.dart';
@@ -33,6 +34,28 @@ class MindMap {
           uuid: const Uuid().v4(),
         );
 
+  /// Edit the provided node with the given params
+  void editNode(
+    Node node, {
+    String? content,
+    String? parentUuid,
+    List<String>? childrenUuids,
+    Offset? position,
+    String? uuid,
+  }) {
+    final editedNode = node.copyWith(
+      content: content,
+      parentUuid: parentUuid,
+      childrenUuids: childrenUuids,
+      position: position,
+      uuid: uuid,
+    );
+
+    deleteNode(node.uuid);
+    addNode(editedNode, node.parentUuid!);
+  }
+
+  /// Adds a new node to the selected node
   void addNode(Node node, String selectedNodeUuid) {
     nodes.add(node);
 
@@ -40,10 +63,13 @@ class MindMap {
     selectedNode.addChild(node.uuid);
   }
 
+  /// Finds a node by its uuid. If no node is found, returns `null`
   Node? findNodeByUuid(String uuid) {
     return nodes.firstWhereOrNull((node) => node.uuid == uuid);
   }
 
+  /// Deletes a node by its uuid. Then goes recursively through its children
+  /// and removes them as well. Also removes the reference from it's parent
   void deleteNode(String uuid) {
     Node? nodeToDelete = findNodeByUuid(uuid);
 
@@ -59,6 +85,7 @@ class MindMap {
       // Remove reference from parent
       if (nodeToDelete.parentUuid != null) {
         Node? parentNode = findNodeByUuid(nodeToDelete.parentUuid!);
+
         if (parentNode != null) {
           parentNode.childrenUuids.remove(uuid);
         }

@@ -1,11 +1,12 @@
 import 'dart:ui';
 
+import 'package:open_mind/app/app.locator.dart';
+import 'package:open_mind/services/database_handler_service.dart';
 import 'package:open_mind/ui/views/mind_map/models/mind_map.dart';
 import 'package:open_mind/ui/views/mind_map/models/node.dart';
 import 'package:stacked/stacked.dart';
 
 class MindMapViewModel extends BaseViewModel {
-  // TODO: Save the mind map, every time a change is made
   MindMap mindMap;
 
   MindMapViewModel({
@@ -30,9 +31,9 @@ class MindMapViewModel extends BaseViewModel {
   }
 
   /// Adds a new node to the selected node, returns the new node
-  Node addNodeToSelectedNode(String content) {
+  Future<Node> addNodeToSelectedNode(String content) async {
     if (selectedNode == null) {
-      throw Exception("No node selected");
+      throw const NoNodeSelectedException();
     }
 
     final newNode = Node.fromParams(
@@ -41,47 +42,50 @@ class MindMapViewModel extends BaseViewModel {
       position: Offset.zero,
       parentUuid: selectedNode!,
     );
-
     mindMap.addNode(newNode, selectedNode!);
+
+    await saveMindMap();
 
     rebuildUi();
 
     return newNode;
   }
 
-  void editSelectedNode({
+  /// Edits the selected node. Just enter the params you want to change
+  Future<void> editSelectedNode({
     String? content,
-    String? parent,
-    List<String>? children,
+    String? parentUuid,
+    List<String>? childrenUuids,
     Offset? position,
-  }) {
+    String? uuid,
+  }) async {
     if (selectedNode == null) {
-      throw Exception("No node selected");
+      throw const NoNodeSelectedException();
     }
 
-    final newNode = findNodeByUuid(selectedNode!)!.copyWith(
+    mindMap.editNode(
+      findNodeByUuid(selectedNode!)!,
       content: content,
-      parentUuid: parent,
-      childrenUuids: children,
+      parentUuid: parentUuid,
+      childrenUuids: childrenUuids,
       position: position,
+      uuid: uuid,
     );
 
-    mindMap = mindMap.copyWith(
-      nodes: mindMap.nodes
-          .map((node) => node.uuid == selectedNode! ? newNode : node)
-          .toList(),
-    );
+    await saveMindMap();
 
     rebuildUi();
   }
 
-  void deleteSelectedNode() {
+  Future<void> deleteSelectedNode() async {
     if (selectedNode == null) {
-      throw Exception("No node selected");
+      throw const NoNodeSelectedException();
     }
 
     mindMap.deleteNode(selectedNode!);
     selectedNode = null;
+
+    await saveMindMap();
 
     rebuildUi();
   }
@@ -90,5 +94,25 @@ class MindMapViewModel extends BaseViewModel {
     node.updatePosition(offset);
 
     rebuildUi();
+  }
+
+  /// Saves the mind map. Also toggels the [busy] state
+  Future<void> saveMindMap() async {
+    await runBusyFuture(
+      locator<DatabaseHandlerService>().saveMindMap(
+        mindMap.copyWith(
+          lastEditedAt: DateTime.now(),
+        ),
+      ),
+    );
+  }
+}
+
+class NoNodeSelectedException implements Exception {
+  const NoNodeSelectedException();
+
+  @override
+  String toString() {
+    return "No node selected";
   }
 }

@@ -14,6 +14,7 @@ class MindMapWidget extends StackedView<MindMapModel> {
   final Offset mindMapOffset;
   final void Function(Node node) onNodeSelected;
   final void Function(Node node, Offset offset) onNodeDragged;
+  final void Function() onNodeDragEnd;
   final void Function(Offset offset) onPan;
 
   const MindMapWidget({
@@ -23,6 +24,7 @@ class MindMapWidget extends StackedView<MindMapModel> {
     this.mindMapOffset = Offset.zero,
     required this.onNodeSelected,
     required this.onNodeDragged,
+    required this.onNodeDragEnd,
     required this.onPan,
   });
 
@@ -61,6 +63,7 @@ class MindMapWidget extends StackedView<MindMapModel> {
                 isSelected: selectedNodeUuid == node.uuid,
                 onNodeSelected: onNodeSelected,
                 onNodeDragged: onNodeDragged,
+                onNodeDragEnd: onNodeDragEnd,
                 panningOffset: viewModel.panningOffset,
               ),
             ),

@@ -118,8 +118,9 @@ class HomeView extends StackedView<HomeViewModel> {
 
                               return ListTile(
                                 title: Text(mindMap.name),
-                                subtitle:
-                                    Text(formatDateTime(mindMap.lastEditedAt)),
+                                subtitle: Text(
+                                  formatDateTime(mindMap.lastEditedAt),
+                                ),
                                 trailing: IconButton(
                                   onPressed: () async {
                                     await viewModel.deleteMindMap(mindMap);
