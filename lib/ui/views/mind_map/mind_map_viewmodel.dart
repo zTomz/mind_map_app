@@ -5,6 +5,7 @@ import 'package:open_mind/ui/views/mind_map/models/node.dart';
 import 'package:stacked/stacked.dart';
 
 class MindMapViewModel extends BaseViewModel {
+  // TODO: Save the mind map, every time a change is made
   MindMap mindMap;
 
   MindMapViewModel({

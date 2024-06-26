@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:open_mind/app/app.dialogs.dart';
 import 'package:open_mind/app/app.locator.dart';
+import 'package:open_mind/services/database_handler_service.dart';
 import 'package:open_mind/ui/common/theme_extension.dart';
 import 'package:open_mind/ui/dialogs/text_field/text_field_dialog_request_data.dart';
 import 'package:open_mind/ui/views/mind_map/models/mind_map.dart';
@@ -27,6 +28,12 @@ class MindMapView extends StackedView<MindMapViewModel> {
     return Scaffold(
       appBar: AppBar(
         title: Text(mindMap.name),
+        leading: BackButton(
+          onPressed: () async {
+            await locator<DatabaseHandlerService>().saveMindMap(mindMap);
+            locator<NavigationService>().back();
+          },
+        ),
         actions: [
           if (viewModel.hasSelectedNode) ...[
             IconButton(

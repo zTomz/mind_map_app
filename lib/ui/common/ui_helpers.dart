@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 abstract class Spacing {
   static const double small = 12;
   static const double medium = 18;
@@ -7,4 +9,9 @@ abstract class Spacing {
 abstract class Radii {
   static const double small = 14;
   static const double medium = 20;
+}
+
+String formatDateTime(DateTime dateTime) {
+  final DateFormat formatter = DateFormat('dd.MM.yyyy HH:mm');
+  return formatter.format(dateTime);
 }

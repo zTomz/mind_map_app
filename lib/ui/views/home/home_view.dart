@@ -35,8 +35,11 @@ class HomeView extends StackedView<HomeViewModel> {
           );
 
           if (result != null && result.confirmed && result.data != null) {
+            final newMindMap = MindMap.fromName(name: result.data!);
+            await viewModel.createNewMindMap(newMindMap);
+
             locator<NavigationService>().navigateToMindMapView(
-              mindMap: MindMap.fromName(name: result.data!),
+              mindMap: newMindMap,
             );
           }
         },
@@ -109,22 +112,24 @@ class HomeView extends StackedView<HomeViewModel> {
                       : Material(
                           color: context.colorScheme.surfaceContainer,
                           child: ListView.separated(
-                            itemCount: 15,
+                            itemCount: viewModel.mindMaps.length,
                             itemBuilder: (context, index) {
+                              final mindMap = viewModel.mindMaps[index];
+
                               return ListTile(
-                                title: Text("Item $index"),
-                                subtitle: const Text("16.06.2024 12:47"),
+                                title: Text(mindMap.name),
+                                subtitle:
+                                    Text(formatDateTime(mindMap.lastEditedAt)),
                                 trailing: IconButton(
-                                  onPressed: () {
-                                    // TODO: Delete mind map
+                                  onPressed: () async {
+                                    await viewModel.deleteMindMap(mindMap);
                                   },
                                   icon: const Icon(Icons.delete_outlined),
                                 ),
                                 onTap: () {
                                   locator<NavigationService>()
                                       .navigateToMindMapView(
-                                    mindMap:
-                                        MindMap.fromName(name: 'Item $index'),
+                                    mindMap: mindMap,
                                   );
                                 },
                                 tileColor:
@@ -154,4 +159,11 @@ class HomeView extends StackedView<HomeViewModel> {
     BuildContext context,
   ) =>
       HomeViewModel();
+
+  @override
+  void onViewModelReady(HomeViewModel viewModel) async {
+    await viewModel.init();
+
+    super.onViewModelReady(viewModel);
+  }
 }

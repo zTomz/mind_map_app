@@ -7,26 +7,29 @@ import 'package:uuid/uuid.dart';
 import 'package:open_mind/ui/views/mind_map/models/node.dart';
 
 class MindMap {
-  List<Node> nodes;
   final String name;
+  List<Node> nodes;
   final DateTime createdAt;
+  final DateTime lastEditedAt;
   final String uuid;
 
   MindMap({
-    required this.nodes,
     required this.name,
+    required this.nodes,
     required this.createdAt,
+    required this.lastEditedAt,
     required this.uuid,
   });
 
   MindMap.fromName({
     required String name,
   }) : this(
+          name: name,
           nodes: [
             Node.root(name),
           ],
-          name: name,
           createdAt: DateTime.now(),
+          lastEditedAt: DateTime.now(),
           uuid: const Uuid().v4(),
         );
 
@@ -64,45 +67,48 @@ class MindMap {
   }
 
   MindMap copyWith({
-    List<Node>? nodes,
     String? name,
+    List<Node>? nodes,
     DateTime? createdAt,
+    DateTime? lastEditedAt,
     String? uuid,
   }) {
     return MindMap(
-      nodes: nodes ?? this.nodes,
       name: name ?? this.name,
+      nodes: nodes ?? this.nodes,
       createdAt: createdAt ?? this.createdAt,
+      lastEditedAt: lastEditedAt ?? this.lastEditedAt,
       uuid: uuid ?? this.uuid,
     );
   }
 
   @override
   String toString() {
-    return 'MindMap(nodes: $nodes, name: $name createdAt: $createdAt, uuid: $uuid)';
+    return 'MindMap(name: $name, nodes: $nodes, createdAt: $createdAt, lastEditedAt: $lastEditedAt, uuid: $uuid)';
   }
-
-  
 
   Map<String, dynamic> toMap() {
     return {
-      'nodes': nodes.map((x) => x.toMap()).toList(),
       'name': name,
+      'nodes': nodes.map((x) => x.toMap()).toList(),
       'createdAt': createdAt.millisecondsSinceEpoch,
+      'lastEditedAt': lastEditedAt.millisecondsSinceEpoch,
       'uuid': uuid,
     };
   }
 
   factory MindMap.fromMap(Map<String, dynamic> map) {
     return MindMap(
-      nodes: List<Node>.from(map['nodes']?.map((x) => Node.fromMap(x))),
       name: map['name'] ?? '',
+      nodes: List<Node>.from(map['nodes']?.map((x) => Node.fromMap(x))),
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
+      lastEditedAt: DateTime.fromMillisecondsSinceEpoch(map['lastEditedAt']),
       uuid: map['uuid'] ?? '',
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory MindMap.fromJson(String source) => MindMap.fromMap(json.decode(source));
+  factory MindMap.fromJson(String source) =>
+      MindMap.fromMap(json.decode(source));
 }
