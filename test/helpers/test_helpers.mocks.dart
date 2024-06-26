@@ -10,6 +10,7 @@ import 'package:flutter/material.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i4;
 import 'package:open_mind/services/app_info_service.dart' as _i8;
+import 'package:open_mind/services/database_handler_service.dart' as _i9;
 import 'package:package_info_plus/package_info_plus.dart' as _i2;
 import 'package:stacked_services/stacked_services.dart' as _i3;
 
@@ -719,3 +720,9 @@ class MockAppInfoService extends _i1.Mock implements _i8.AppInfoService {
         returnValueForMissingStub: _i6.Future<void>.value(),
       ) as _i6.Future<void>);
 }
+
+/// A class which mocks [DatabaseHandlerService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockDatabaseHandlerService extends _i1.Mock
+    implements _i9.DatabaseHandlerService {}

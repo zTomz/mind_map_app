@@ -30,8 +30,8 @@ class MainApp extends StatelessWidget {
       navigatorObservers: [
         StackedService.routeObserver,
       ],
-      theme:  MaterialTheme().light(),
-      darkTheme:  MaterialTheme().dark(),
+      theme: MaterialTheme().light(),
+      darkTheme: MaterialTheme().dark(),
     );
   }
 }

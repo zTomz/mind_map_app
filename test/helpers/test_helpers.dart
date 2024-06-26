@@ -3,6 +3,7 @@ import 'package:mockito/mockito.dart';
 import 'package:open_mind/app/app.locator.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:open_mind/services/app_info_service.dart';
+import 'package:open_mind/services/database_handler_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -12,6 +13,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<BottomSheetService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<DialogService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<AppInfoService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<DatabaseHandlerService>(onMissingStub: OnMissingStub.returnDefault),
 // @stacked-mock-spec
 ])
 void registerServices() {
@@ -19,6 +21,7 @@ void registerServices() {
   getAndRegisterBottomSheetService();
   getAndRegisterDialogService();
   getAndRegisterAppInfoService();
+  getAndRegisterDatabaseHandlerService();
 // @stacked-mock-register
 }
 
@@ -79,6 +82,12 @@ MockAppInfoService getAndRegisterAppInfoService() {
   return service;
 }
 
+MockDatabaseHandlerService getAndRegisterDatabaseHandlerService() {
+  _removeRegistrationIfExists<DatabaseHandlerService>();
+  final service = MockDatabaseHandlerService();
+  locator.registerSingleton<DatabaseHandlerService>(service);
+  return service;
+}
 // @stacked-mock-create
 
 void _removeRegistrationIfExists<T extends Object>() {

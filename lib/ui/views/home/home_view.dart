@@ -95,36 +95,51 @@ class HomeView extends StackedView<HomeViewModel> {
                     color: context.colorScheme.surfaceContainer,
                     borderRadius: BorderRadius.circular(Radii.medium),
                   ),
-                  child: Material(
-                    color: context.colorScheme.surfaceContainer,
-                    child: ListView.separated(
-                      itemCount: 15,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text("Item $index"),
-                          subtitle: const Text("16.06.2024 12:47"),
-                          trailing: IconButton(
-                            onPressed: () {
-                              // TODO: Delete mind map
+                  child: viewModel.isBusy
+                      ? const Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CircularProgressIndicator(),
+                              SizedBox(height: Spacing.medium),
+                              Text("Loading Mind Maps..."),
+                            ],
+                          ),
+                        )
+                      : Material(
+                          color: context.colorScheme.surfaceContainer,
+                          child: ListView.separated(
+                            itemCount: 15,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text("Item $index"),
+                                subtitle: const Text("16.06.2024 12:47"),
+                                trailing: IconButton(
+                                  onPressed: () {
+                                    // TODO: Delete mind map
+                                  },
+                                  icon: const Icon(Icons.delete_outlined),
+                                ),
+                                onTap: () {
+                                  locator<NavigationService>()
+                                      .navigateToMindMapView(
+                                    mindMap:
+                                        MindMap.fromName(name: 'Item $index'),
+                                  );
+                                },
+                                tileColor:
+                                    context.colorScheme.surfaceContainerLow,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(Radii.medium),
+                                ),
+                              );
                             },
-                            icon: const Icon(Icons.delete_outlined),
+                            separatorBuilder: (_, __) => const SizedBox(
+                              height: Spacing.medium / 2,
+                            ),
                           ),
-                          onTap: () {
-                            locator<NavigationService>().navigateToMindMapView(
-                              mindMap: MindMap.fromName(name: 'Item $index'),
-                            );
-                          },
-                          tileColor: context.colorScheme.surfaceContainerLow,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(Radii.medium),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (_, __) => const SizedBox(
-                        height: Spacing.medium / 2,
-                      ),
-                    ),
-                  ),
+                        ),
                 ),
               ),
             ],

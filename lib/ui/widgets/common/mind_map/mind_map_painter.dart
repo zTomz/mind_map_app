@@ -30,12 +30,14 @@ class MindMapPainter extends CustomPainter {
           Offset(
             nodeBubbleSize.width / 2,
             nodeBubbleSize.height / 2,
-          ) + panningOffset;
+          ) +
+          panningOffset;
       final parentPos = parent.position +
           Offset(
             parentBubbleSize.width / 2,
             parentBubbleSize.height / 2,
-          ) + panningOffset;
+          ) +
+          panningOffset;
 
       final rect = Rect.fromLTRB(
         math.min(nodePos.dx, parentPos.dx),
