@@ -76,17 +76,32 @@ class HomeView extends StackedView<HomeViewModel> {
                       style: context.textTheme.bodyLarge,
                     ),
                     const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.only(right: Spacing.medium),
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Settings"),
-                          ],
+                    Wrap(
+                      direction: Axis.vertical,
+                      spacing: Spacing.small,
+                      children: [
+                        IconButton.outlined(
+                          onPressed: () {
+                            final packageInfo =
+                                locator<AppInfoService>().packageInfo;
+                            showAboutDialog(
+                              context: context,
+                              applicationName: packageInfo.appName,
+                              applicationVersion: packageInfo.version,
+                              // TODO: Add app icon here
+                            );
+                          },
+                          tooltip: "About",
+                          iconSize: 35,
+                          icon: const Icon(Icons.info_rounded),
                         ),
-                      ),
+                        IconButton.outlined(
+                          onPressed: () {},
+                          tooltip: "Settings",
+                          iconSize: 35,
+                          icon: const Icon(Icons.settings_rounded),
+                        ),
+                      ],
                     ),
                   ],
                 ),

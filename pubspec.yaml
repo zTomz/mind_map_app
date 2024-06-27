@@ -43,3 +43,5 @@ flutter:
         - asset: assets/fonts/ClashDisplay/ClashDisplay-Medium.ttf
           weight: 700
 
+  assets:
+    - assets/fonts/license.txt
