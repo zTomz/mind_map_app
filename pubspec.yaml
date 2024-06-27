@@ -32,3 +32,14 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  fonts:
+    - family: Satoshi
+      fonts:
+        - asset: assets/fonts/Satoshi/Satoshi-Medium.ttf
+        - asset: assets/fonts/Satoshi/Satoshi-Regular.ttf
+          weight: 300
+    - family: ClashDisplay
+      fonts:
+        - asset: assets/fonts/ClashDisplay/ClashDisplay-Medium.ttf
+          weight: 700
+

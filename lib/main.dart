@@ -1,5 +1,4 @@
-// TODO: Change the font
-// Title: https://www.fontshare.com/fonts/clash-display
+// TODO: Add font licenses
 // TODO: Create an app icon
 
 import 'package:flutter/material.dart';
@@ -35,7 +34,7 @@ class MainApp extends StatelessWidget {
         StackedService.routeObserver,
       ],
       theme: MaterialTheme().light(),
-      darkTheme: MaterialTheme().dark(),
+      darkTheme: MaterialTheme().darkMediumContrast(),
     );
   }
 }

@@ -19,7 +19,9 @@ class EditableTextWidget extends StatelessWidget {
     return TextFormField(
       initialValue: text,
       onChanged: onChanged,
-      style: context.textTheme.headlineSmall,
+      style: context.textTheme.headlineSmall!.copyWith(
+        fontWeight: FontWeight.w700,
+      ),
       decoration: const InputDecoration.collapsed(hintText: "Mind Map Name"),
     );
   }

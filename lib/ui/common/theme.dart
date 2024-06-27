@@ -1,10 +1,6 @@
 import "package:flutter/material.dart";
 
 class MaterialTheme {
-  // final TextTheme textTheme;
-
-  // const MaterialTheme(this.textTheme);
-
   static ColorScheme lightScheme() {
     return const ColorScheme(
       brightness: Brightness.light,
@@ -339,10 +335,18 @@ class MaterialTheme {
         useMaterial3: true,
         brightness: colorScheme.brightness,
         colorScheme: colorScheme,
-        //  textTheme: textTheme.apply(
-        //    bodyColor: colorScheme.onSurface,
-        //    displayColor: colorScheme.onSurface,
-        //  ),
+        textTheme: TextTheme(
+          displayLarge: TextStyle(
+            fontSize: 70,
+            fontWeight: FontWeight.w700,
+            color: colorScheme.onSurface,
+            fontFamily: 'ClashDisplay',
+          ),
+        ).apply(
+          bodyColor: colorScheme.onSurface,
+          displayColor: colorScheme.onSurface,
+        ),
+        fontFamily: 'Satoshi',
         scaffoldBackgroundColor: colorScheme.surface,
         canvasColor: colorScheme.surface,
       );
