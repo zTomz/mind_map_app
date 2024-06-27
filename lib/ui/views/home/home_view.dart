@@ -123,25 +123,38 @@ class HomeView extends StackedView<HomeViewModel> {
                                 ),
                                 trailing: IconButton(
                                   onPressed: () async {
-                                    await viewModel.deleteMindMap(mindMap);
+                                    viewModel.removeMindMap(mindMap);
 
-                                    // Check if we can show a snack bar, if not we recreate the mind map
-                                    if (context.mounted) {
-                                      showMaterialSnackBar(
-                                        context,
-                                        message:
-                                            'Deleted mind map "${mindMap.name}" successfully',
-                                        action: SnackBarAction(
-                                          label: "Undo",
-                                          onPressed: () async {
-                                            await viewModel
-                                                .createNewMindMap(mindMap);
-                                          },
-                                        ),
-                                      );
-                                    } else {
-                                      await viewModel.createNewMindMap(mindMap);
-                                    }
+                                    final controller = showMaterialSnackBar(
+                                      context,
+                                      message:
+                                          'Deleted mind map "${mindMap.name}" successfully',
+                                      action: SnackBarAction(
+                                        label: "Undo",
+                                        onPressed: () {
+                                          // The action is handeled in the controller closed function
+                                        },
+                                      ),
+                                    );
+
+                                    controller.closed.then(
+                                      (value) async {
+                                        switch (value) {
+                                          case SnackBarClosedReason.action:
+                                            viewModel.addMindMap(mindMap);
+
+                                          case SnackBarClosedReason.swipe:
+                                          case SnackBarClosedReason.remove:
+                                          case SnackBarClosedReason.dismiss:
+                                          case SnackBarClosedReason.hide:
+                                          case SnackBarClosedReason.timeout:
+                                            await viewModel.deleteMindMap(
+                                              mindMap,
+                                              alreadyRemoved: true,
+                                            );
+                                        }
+                                      },
+                                    );
                                   },
                                   icon: const Icon(Icons.delete_outlined),
                                 ),

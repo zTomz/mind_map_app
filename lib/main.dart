@@ -1,4 +1,5 @@
 // TODO: Change the font
+// Title: https://www.fontshare.com/fonts/clash-display
 // TODO: Create an app icon
 
 import 'package:flutter/material.dart';
